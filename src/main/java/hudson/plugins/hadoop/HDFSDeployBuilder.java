@@ -16,11 +16,11 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import net.sf.json.JSONObject;
 
-public class HadoopDeployBuilder extends Builder implements Serializable {
+public class HDFSDeployBuilder extends Builder implements Serializable {
 	private final String artifact;
 	
 	@DataBoundConstructor
-	HadoopDeployBuilder(String artifact) {
+	HDFSDeployBuilder(String artifact) {
 		this.artifact = artifact;
 	}
 	
