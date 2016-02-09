@@ -17,23 +17,23 @@ import hudson.tasks.Builder;
 import net.sf.json.JSONObject;
 
 public class HDFSDeployBuilder extends Builder implements Serializable {
-	private final String artifact;
+	private final String artifactToDeploy;
 	
 	@DataBoundConstructor
-	HDFSDeployBuilder(String artifact) {
-		this.artifact = artifact;
+	public HDFSDeployBuilder(String artifactToDeploy) {
+		this.artifactToDeploy = artifactToDeploy;
 	}
 	
-	public String getArtifact() {
-		return artifact;
+	public String getArtifactToDeploy() {
+		return artifactToDeploy;
 	}
 	@Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) throws IOException, InterruptedException {
         
 		HDFSDeployer hdfsDeployer = new HDFSDeployer();
 
-        listener.getLogger().println("Deploying artifact: " + artifact);
-        hdfsDeployer.deploy(artifact, getDescriptor().getHDFSURI());
+        listener.getLogger().println("Deploying artifact: " + artifactToDeploy);
+        hdfsDeployer.deploy(artifactToDeploy, getDescriptor().getHDFSURI());
         return true;
     }
     
@@ -67,7 +67,7 @@ public class HDFSDeployBuilder extends Builder implements Serializable {
         public boolean configure(StaplerRequest staplerRequest, JSONObject json) throws FormException {
             // to persist global configuration information,
             // set that to properties and call save().
-        	hdfsURI = json.getBoolean("HDFSURI");
+        	hdfsURI = json.getString("HDFSURI");
             save();
             return true; // indicate that everything is good so far
         }

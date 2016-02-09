@@ -1,9 +1,7 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-    <f:section title="${%Site Monitor}">
+    <f:section title="${%Hadoop CLuster Info}">
         <f:entry title="${%HDFS URI}" help="/plugin/hadoop-plugin/hdfsuri.html">
-            <table style="width: 100%;">
-                <f:textbox name="HDFS URI" value="${descriptor.HDFSURI}"/>
-            </table>
+                <f:textbox name="HDFSURI" value="${descriptor.HDFSURI}"/>
         </f:entry>
     </f:section>
 </j:jelly>
