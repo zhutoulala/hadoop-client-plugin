@@ -13,20 +13,21 @@ import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.tasks.BuildStepDescriptor;
-import hudson.tasks.Builder;
+import hudson.tasks.Publisher;
 import net.sf.json.JSONObject;
 
-public class HDFSDeployBuilder extends Builder implements Serializable {
+public class HDFSDeployPublisher extends Publisher implements Serializable {
 	private final String artifactToDeploy;
 	
 	@DataBoundConstructor
-	public HDFSDeployBuilder(String artifactToDeploy) {
+	public HDFSDeployPublisher(String artifactToDeploy) {
 		this.artifactToDeploy = artifactToDeploy;
 	}
 	
 	public String getArtifactToDeploy() {
 		return artifactToDeploy;
 	}
+	
 	@Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) throws IOException, InterruptedException {
         
@@ -45,7 +46,7 @@ public class HDFSDeployBuilder extends Builder implements Serializable {
 
     // this annotation tells Hudson that this is the implementation of an extension point
     @Extension
-    public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
+    public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
     	private String hdfsURI;
     	
@@ -55,7 +56,7 @@ public class HDFSDeployBuilder extends Builder implements Serializable {
     	
         @Override
         public String getDisplayName() {
-            return Messages.Hadoop_BuilderName();
+            return Messages.HadoopJobBuilderName();
         }
 
         @Override
