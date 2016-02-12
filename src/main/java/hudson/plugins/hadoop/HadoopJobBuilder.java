@@ -35,7 +35,7 @@ public class HadoopJobBuilder extends Builder implements Serializable {
         
 		HadoopJob hadoopJob = new HadoopJob(jobHDFSPath, HadoopJob.JobType.MAPREDUCE);
 		
-        return hadoopJob.run();
+        return hadoopJob.run(getDescriptor().getJobLaunchNode());
     }
 	
 	@Override
@@ -48,7 +48,7 @@ public class HadoopJobBuilder extends Builder implements Serializable {
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
-    	private String hdfsURI;
+    	private String jobLaunchNode;
     	
         public DescriptorImpl() {
             load();
@@ -56,7 +56,7 @@ public class HadoopJobBuilder extends Builder implements Serializable {
     	
         @Override
         public String getDisplayName() {
-            return Messages.HDFSDeployPublisherName();
+            return Messages.HadoopJobBuilderName();
         }
 
         @Override
@@ -68,13 +68,13 @@ public class HadoopJobBuilder extends Builder implements Serializable {
         public boolean configure(StaplerRequest staplerRequest, JSONObject json) throws FormException {
             // to persist global configuration information,
             // set that to properties and call save().
-        	hdfsURI = json.getString("HDFSURI");
+        	jobLaunchNode = json.getString("JobLaunchNode");
             save();
             return true; // indicate that everything is good so far
         }
 
-        public String getHDFSURI() {
-            return hdfsURI;
+        public String getJobLaunchNode() {
+            return jobLaunchNode;
         }
     }
 

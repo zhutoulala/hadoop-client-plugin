@@ -18,7 +18,7 @@ public class HadoopJob {
 		this.jobType = jobType;
 	}
 	
-	boolean run() {
+	boolean run(String jobLaunchNode) {
 		//TODO 
 		return true;
 	}

@@ -13,6 +13,7 @@ import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.tasks.BuildStepDescriptor;
+import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
 import net.sf.json.JSONObject;
 
@@ -44,6 +45,12 @@ public class HDFSDeployPublisher extends Publisher implements Serializable {
         return (DescriptorImpl)super.getDescriptor();
     }
 
+    
+    public BuildStepMonitor getRequiredMonitorService() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+    
     // this annotation tells Hudson that this is the implementation of an extension point
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
@@ -56,7 +63,7 @@ public class HDFSDeployPublisher extends Publisher implements Serializable {
     	
         @Override
         public String getDisplayName() {
-            return Messages.HadoopJobBuilderName();
+            return Messages.HDFSDeployPublisherName();
         }
 
         @Override
