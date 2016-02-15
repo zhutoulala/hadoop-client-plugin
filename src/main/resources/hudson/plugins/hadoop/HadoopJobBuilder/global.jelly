@@ -3,5 +3,11 @@
         <f:entry title="${%Job Launch Node}" help="/plugin/hadoop-plugin/hdfsuri.html">
                 <f:textbox name="JobLaunchNode" value="${descriptor.JobLaunchNode}"/>
         </f:entry>
+        <f:entry title="Node SSH Username:" field="username">
+            <f:textbox clazz="required"/>
+          </f:entry>
+          <f:entry title="Node SSH Password:" field="password">
+            <f:password clazz="required"/>
+          </f:entry>
     </f:section>
 </j:jelly>

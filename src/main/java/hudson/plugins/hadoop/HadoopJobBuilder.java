@@ -33,9 +33,10 @@ public class HadoopJobBuilder extends Builder implements Serializable {
 	@Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) throws IOException, InterruptedException {
         
-		HadoopJob hadoopJob = new HadoopJob(jobHDFSPath, HadoopJob.JobType.MAPREDUCE);
+		HadoopJob hadoopJob = new HadoopJob(jobHDFSPath, HadoopJob.JobType.YARN);
+		DescriptorImpl descriptor = getDescriptor();
 		
-        return hadoopJob.run(getDescriptor().getJobLaunchNode());
+        return hadoopJob.run(descriptor.getJobLaunchNode(), descriptor.getUsername(), descriptor.getPassword(), listener);
     }
 	
 	@Override
@@ -49,6 +50,8 @@ public class HadoopJobBuilder extends Builder implements Serializable {
     public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
     	private String jobLaunchNode;
+    	private String username;
+    	private String password;
     	
         public DescriptorImpl() {
             load();
@@ -69,12 +72,22 @@ public class HadoopJobBuilder extends Builder implements Serializable {
             // to persist global configuration information,
             // set that to properties and call save().
         	jobLaunchNode = json.getString("JobLaunchNode");
+        	username = json.getString("Username");
+        	password = json.getString("Password");
             save();
             return true; // indicate that everything is good so far
         }
 
         public String getJobLaunchNode() {
             return jobLaunchNode;
+        }
+        
+        public String getUsername() {
+        	return username;
+        }
+        
+        public String getPassword() {
+        	return password;
         }
     }
 
