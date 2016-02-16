@@ -39,5 +39,7 @@ public class HDFSDeployer {
 	    
 	    //Copy file from local to HDFS
 	    IOUtils.copyBytes(in, out, 4096, true);
+	    
+	    fs.close();
 	}
 }
