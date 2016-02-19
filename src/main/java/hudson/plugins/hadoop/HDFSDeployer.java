@@ -6,40 +6,41 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IOUtils;
+import org.mortbay.util.IO;
+
+import hudson.model.BuildListener;
 
 public class HDFSDeployer {
-	
-	private Configuration conf;
-	public HDFSDeployer() {
-		conf = new Configuration();
-	}
 
-	public void deploy(String localFile, String hdfsURI) throws IOException {
-		InputStream in = new BufferedInputStream(new FileInputStream(localFile));
+	private static final int BUFFER_SIZE = 4096;
 
-		//Get configuration of Hadoop system
-		Configuration conf = new Configuration();
-		System.out.println("Connecting to -- "+conf.get("fs.defaultFS"));
+	public static boolean deploy(String localFile, String hdfsURI, BuildListener listener)
+			throws IOException, URISyntaxException {
+		listener.getLogger().println("Connecting to -- " + hdfsURI);
 
-		//Destination file in HDFS
-		FileSystem fs = FileSystem.get(conf);
-		
-		
+		// Destination file in HDFS
+		FileSystem fs = FileSystem.get(new URI(hdfsURI), new Configuration());
 		Path path = new Path(hdfsURI);
-	    if (fs.exists(path)) {
-	        System.out.println("already exists");
-	        return;
-	    }
-	    OutputStream out = fs.create(path);
-	    
-	    //Copy file from local to HDFS
-	    IOUtils.copyBytes(in, out, 4096, true);
-	    
-	    fs.close();
+		if (fs.exists(path)) {
+			listener.error(hdfsURI + " already exists");
+			fs.close();
+			return false;
+		}
+
+		InputStream in = new BufferedInputStream(new FileInputStream(localFile));
+		OutputStream out = fs.create(path);
+
+		// Copy file from local to HDFS
+		IOUtils.copyBytes(in, out, BUFFER_SIZE, true);
+		in.close();
+		out.close();
+		fs.close();
+		return true;
 	}
 }
