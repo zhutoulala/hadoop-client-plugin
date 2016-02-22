@@ -14,20 +14,14 @@ import com.jcraft.jsch.Session;
 import hudson.model.BuildListener;
 
 public class HadoopJob {
-	
+
 	private String jobHDFSPath;
 	private JobType jobType;
 
 	public enum JobType {
-		YARN,
-		HIVE,
-		PIG,
-		HBASE,
-		OOZIE,
+		YARN, HIVE, PIG, HBASE, OOZIE,
 	}
-	
-	
-	
+
 	public String getJobHDFSPath() {
 		return jobHDFSPath;
 	}
@@ -48,9 +42,9 @@ public class HadoopJob {
 		this.jobHDFSPath = jobHDFSPath;
 		this.jobType = jobType;
 	}
-	
+
 	public String genCommand() {
-		String command = "hdfs fs -get "+jobHDFSPath+" /tmp/temp_job;";
+		String command = "hdfs fs -get " + jobHDFSPath + " /tmp/temp_job;";
 		switch (jobType) {
 		case YARN:
 			command += "yarn -jar /tmp/temp_job";
@@ -62,28 +56,36 @@ public class HadoopJob {
 		return null;
 	}
 	
-	boolean run(String jobLaunchNode, String username, String password, BuildListener listener) throws IOException {
+	public boolean run(String targetHost, String username, String password, BuildListener listener) {
+		String command = genCommand();
+		return runSSHCommand(targetHost, username, password, command, listener);
+	}
+
+	public static boolean runSSHCommand(String targetHost, String username, String password, String command, BuildListener listener){
 		JSch jsch = new JSch();
 		Session session = null;
 		ChannelExec channel = null;
 		try {
-			session = jsch.getSession(username, jobLaunchNode, 22);
+			session = jsch.getSession(username, targetHost, 22);
 			session.setPassword(password);
 			Properties config = new Properties();
 			config.put("StrictHostKeyChecking", "no");
 			session.setConfig(config);
 			session.connect();
-			channel=(ChannelExec) session.openChannel("exec");
-			BufferedReader in=new BufferedReader(new InputStreamReader(channel.getInputStream()));
-			channel.setCommand(genCommand());
+			channel = (ChannelExec) session.openChannel("exec");
+			BufferedReader in = new BufferedReader(new InputStreamReader(channel.getInputStream()));
+			channel.setCommand(command);
 			channel.connect();
-	
-			String msg=null;
-			while((msg=in.readLine())!=null){
+
+			String msg = null;
+			while ((msg = in.readLine()) != null) {
 				listener.getLogger().println(msg);
 			}
 			return channel.getExitStatus() == 0;
 
+		} catch (IOException e) {
+			listener.error(e.getMessage());
+			return false;
 		} catch (JSchException e) {
 			listener.error(e.getMessage());
 			return false;

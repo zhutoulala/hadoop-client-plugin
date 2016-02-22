@@ -2,6 +2,7 @@ package hudson.plugins.hadoop;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URISyntaxException;
 
 import javax.ws.rs.core.Response;
 
@@ -35,7 +36,12 @@ public class HDFSDeployPublisher extends Publisher implements Serializable {
 		HDFSDeployer hdfsDeployer = new HDFSDeployer();
 
         listener.getLogger().println("Deploying artifact: " + artifactToDeploy);
-        hdfsDeployer.deploy(artifactToDeploy, getDescriptor().getHDFSURI());
+        try {
+			hdfsDeployer.deploy(artifactToDeploy, getDescriptor().getHDFSURI(),listener);
+		} catch (URISyntaxException e) {
+			listener.error(e.getMessage());
+			return false;
+		}
         return true;
     }
     
