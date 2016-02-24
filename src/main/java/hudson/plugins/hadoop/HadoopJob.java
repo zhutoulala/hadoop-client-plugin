@@ -15,6 +15,8 @@ import hudson.model.BuildListener;
 
 public class HadoopJob {
 
+	private final String JOB_TEMP_PATH = "/tmp/temp_job";
+	
 	private String jobHDFSPath;
 	private JobType jobType;
 
@@ -44,11 +46,12 @@ public class HadoopJob {
 	}
 
 	public String genCommand() {
-		String command = "hdfs fs -get " + jobHDFSPath + " /tmp/temp_job;";
+		String command = "hdfs fs -get " + jobHDFSPath + " " + JOB_TEMP_PATH + ";";
 		switch (jobType) {
 		case YARN:
-			command += "yarn -jar /tmp/temp_job";
+			command += "yarn -jar " + JOB_TEMP_PATH;
 		case HIVE:
+			command += "hive -f " + JOB_TEMP_PATH;
 		case PIG:
 		case HBASE:
 		case OOZIE:
@@ -62,16 +65,24 @@ public class HadoopJob {
 	}
 
 	public static boolean runSSHCommand(String targetHost, String username, String password, String command, BuildListener listener){
+		if (command == null) {
+			listener.getLogger().println("Invalid command line");
+			return false;
+		}
+		
 		JSch jsch = new JSch();
 		Session session = null;
 		ChannelExec channel = null;
 		try {
+			listener.getLogger().println("Connecting " + targetHost);
 			session = jsch.getSession(username, targetHost, 22);
 			session.setPassword(password);
 			Properties config = new Properties();
 			config.put("StrictHostKeyChecking", "no");
 			session.setConfig(config);
 			session.connect();
+			
+			listener.getLogger().println("Runing command " + command);
 			channel = (ChannelExec) session.openChannel("exec");
 			BufferedReader in = new BufferedReader(new InputStreamReader(channel.getInputStream()));
 			channel.setCommand(command);
