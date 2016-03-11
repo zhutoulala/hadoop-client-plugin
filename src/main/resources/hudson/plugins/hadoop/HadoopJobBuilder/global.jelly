@@ -1,5 +1,5 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-    <f:section title="${%Hadoop CLuster Info}">
+    <f:section title="${%Hadoop Cluster Info}">
         <f:entry title="${%Job Launch Node}" help="/plugin/hadoop-plugin/hdfsuri.html">
                 <f:textbox name="JobLaunchNode" value="${descriptor.JobLaunchNode}"/>
         </f:entry>
