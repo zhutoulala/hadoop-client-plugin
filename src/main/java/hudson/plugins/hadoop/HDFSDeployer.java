@@ -12,7 +12,6 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IOUtils;
-import org.mortbay.util.IO;
 
 import hudson.model.BuildListener;
 
@@ -25,7 +24,11 @@ public class HDFSDeployer {
 		listener.getLogger().println("Connecting to -- " + hdfsURI);
 
 		// Destination file in HDFS
-		FileSystem fs = FileSystem.get(new URI(hdfsURI), new Configuration());
+		Configuration conf = new Configuration();
+		conf.set("fs.hdfs.impl", "org.apache.hadoop.hdfs.DistributedFileSystem");
+		conf.set("fs.file.impl", "org.apache.hadoop.fs.LocalFileSystem");
+		
+		FileSystem fs = FileSystem.get(new URI(hdfsURI), conf);
 		Path path = new Path(hdfsURI);
 		if (fs.exists(path)) {
 			listener.error(hdfsURI + " already exists");

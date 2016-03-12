@@ -16,9 +16,10 @@ import hudson.model.BuildListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Publisher;
+import hudson.tasks.Recorder;
 import net.sf.json.JSONObject;
 
-public class HDFSDeployPublisher extends Publisher implements Serializable {
+public class HDFSDeployPublisher extends Recorder implements Serializable {
 	private final String artifactToDeploy;
 
 	@DataBoundConstructor
@@ -47,14 +48,14 @@ public class HDFSDeployPublisher extends Publisher implements Serializable {
 	}
 
 	@Override
+	public BuildStepMonitor getRequiredMonitorService() {
+		return BuildStepMonitor.NONE;
+	}
+	
+	@Override
 	public DescriptorImpl getDescriptor() {
 		// see Descriptor javadoc for more about what a descriptor is.
 		return (DescriptorImpl) super.getDescriptor();
-	}
-
-	public BuildStepMonitor getRequiredMonitorService() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	// this annotation tells Hudson that this is the implementation of an
@@ -91,5 +92,6 @@ public class HDFSDeployPublisher extends Publisher implements Serializable {
 			return hdfsURI;
 		}
 	}
+
 
 }
