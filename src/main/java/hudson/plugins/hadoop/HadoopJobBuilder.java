@@ -72,8 +72,8 @@ public class HadoopJobBuilder extends Builder implements Serializable {
             // to persist global configuration information,
             // set that to properties and call save().
         	jobLaunchNode = json.getString("JobLaunchNode");
-        	username = json.getString("Username");
-        	password = json.getString("Password");
+        	username = json.getString("username");
+        	password = json.getString("password");
             save();
             return true; // indicate that everything is good so far
         }
