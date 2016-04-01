@@ -50,13 +50,16 @@ public class HadoopJob {
 		switch (jobType) {
 		case YARN:
 			command += "yarn -jar " + JOB_TEMP_PATH;
+			break;
 		case HIVE:
 			command += "hive -f " + JOB_TEMP_PATH;
+			break;
 		case PIG:
 		case HBASE:
 		case OOZIE:
+		default: return null;
 		}
-		return null;
+		return command;
 	}
 	
 	public boolean run(String targetHost, String username, String password, BuildListener listener) {
