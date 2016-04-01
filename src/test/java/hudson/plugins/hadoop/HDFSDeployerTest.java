@@ -23,7 +23,7 @@ public class HDFSDeployerTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		File baseDir = new File("./target/hdfs").getAbsoluteFile();
+		File baseDir = new File("target" + File.separator + "hdfs").getAbsoluteFile();
 		FileUtil.fullyDelete(baseDir);
 		Configuration conf = new Configuration();
 		conf.set(MiniDFSCluster.HDFS_MINIDFS_BASEDIR, baseDir.getAbsolutePath());

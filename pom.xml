@@ -7,11 +7,11 @@
 	</parent>
 
 	<groupId>org.jvnet.hudson.plugins</groupId>
-	<artifactId>hadoop-plugin</artifactId>
+	<artifactId>hadoop-client-plugin</artifactId>
 	<version>0.1-SNAPSHOT</version>
-	<name>Hadoop Plugin</name>
+	<name>Hadoop Client Plugin</name>
 	<description>a jenkins plugin allows you to run hadoop jobs from jenkins</description>
-	<url>http://wiki.jenkins-ci.org/display/JENKINS/Hadoop+Plugin</url>
+	<url>http://wiki.jenkins-ci.org/display/JENKINS/Hadoop+Client+Plugin</url>
 	<packaging>hpi</packaging>
 
 	<licenses>
@@ -89,7 +89,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<parallel>true</parallel>
+					<parallel>methods</parallel>
 					<threadCount>10</threadCount>
 					<systemPropertyVariables>
 						<java.awt.headless>true</java.awt.headless>

@@ -3,17 +3,12 @@ package hudson.plugins.hadoop;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.io.File;
 import java.io.PrintStream;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileUtil;
-import org.apache.hadoop.hdfs.MiniDFSCluster;
 import org.junit.Before;
 import org.junit.Test;
 
 import hudson.model.BuildListener;
-import junit.framework.Assert;
+import org.junit.Assert;
 
 public class HadoopJobTest {
 
